@@ -26,18 +26,25 @@
             </div>
 
             <div class="row">
-                <table class="table">
-                    <tr>
-                        <th>Text</th>
-                        <th>Sentiment</th>
-                    </tr>
-                    {% for ele in result %}
-                        <tr class={% if ele.sentiment > 0 %} "table-success" {% elif ele.sentiment < 0 %} "table-danger" {% else %} "table-primary" {% endif %}>
-                            <td>{{ ele.text }}</td>
-                            <td>{{ ele.sentiment }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
+                {% for ele in result %}
+                    <div class="card">
+                        <div class="card-header text-white {% if ele.sentiment > 0 %} bg-success {% elif ele.sentiment < 0 %} bg-danger {% else %} bg-primary {% endif %}">
+                            <h3>{{ ele.title }}</h3>
+                            <em><strong>Sentiment: </strong> {{ ele.sentiment }}</em>
+                        </div>
+                        <div class="card-body">
+                            <p><a href="{{ ele.link }}">Source Link</a></p>
+                            <strong>Highlights:</strong>
+                            {% for text_tup in ele.lines_with_sentiment %}
+                            <ul>
+                                <li class="{% if text_tup[1] > 0 %} text-success {% elif text_tup[1] < 0 %} text-danger {% else %} text-primary {% endif %}">
+                                    {{text_tup[0]}} <em>(<strong>Sentiment: </strong> {{text_tup[1]}})</em>
+                                </li>
+                            </ul>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </body>

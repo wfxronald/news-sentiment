@@ -1,5 +1,9 @@
-def extract_snippet_from_search_result(data):
-    text_to_analyze = []
-    for item in data["items"]:
-        text_to_analyze.append(item["snippet"])
-    return text_to_analyze
+import trafilatura
+
+
+# this method mutates the existing data dictionary
+def get_text_content(results):
+    for result in results:
+        downloaded = trafilatura.fetch_url(result["link"])
+        text = trafilatura.extract(downloaded)
+        result["text"] = text

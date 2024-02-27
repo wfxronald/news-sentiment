@@ -31,11 +31,17 @@ def get_sentiment(text):
     return scores["compound"]
 
 
-def analyze_sentiments(snippets):
-    result = []
-    for snippet in snippets:
-        result.append({
-            "text": snippet,
-            "sentiment": get_sentiment(preprocess_text(snippet)),
-        })
-    return result
+# this method mutates the existing data dictionary
+def analyze_sentiments(results):
+    for result in results:
+        text = result["text"]
+        overall_sentiment = get_sentiment(preprocess_text(text))
+        result["sentiment"] = overall_sentiment
+
+        # assume split by lines
+        lines_of_text = text.splitlines()
+        lines_with_sentiment = []
+        for line in lines_of_text:
+            lines_with_sentiment.append((line, get_sentiment(preprocess_text(line))))
+        lines_with_sentiment.sort(key=lambda tup: abs(tup[1]), reverse=True)
+        result["lines_with_sentiment"] = lines_with_sentiment[0:3]

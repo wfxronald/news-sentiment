@@ -2,4 +2,5 @@ flask
 nltk
 python-dotenv
 requests
+trafilatura
 WTForms
